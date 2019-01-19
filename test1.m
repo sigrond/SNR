@@ -43,9 +43,9 @@ layers = [
  ]
 
 imageSize = [227 227 3];
-augmentedTrainingSet = augmentedImageDatastore(imageSize, trainingSet, 'ColorPreprocessing', 'gray2rgb');
-augmentedValidationSet = augmentedImageDatastore(imageSize, validationSet, 'ColorPreprocessing', 'gray2rgb');
-augmentedTestSet = augmentedImageDatastore(imageSize, testSet, 'ColorPreprocessing', 'gray2rgb');
+augmentedTrainingSet = augmentedImageDatastore(imageSize, trainingSet);
+augmentedValidationSet = augmentedImageDatastore(imageSize, validationSet);
+augmentedTestSet = augmentedImageDatastore(imageSize, testSet);
 
 options = trainingOptions('sgdm', ...
     'InitialLearnRate',0.01, ...
@@ -56,10 +56,10 @@ options = trainingOptions('sgdm', ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-load 'myAlexNet.mat';
-if ~exist('net', 'var')
+%load 'myAlexNet.mat';
+%if ~exist('net', 'var')
     net = trainNetwork(augmentedTrainingSet,layers,options);
-end
+%end
 
 [YPred,scores] = classify(net,augmentedTestSet);
 [S,I] = maxk(scores',5);
