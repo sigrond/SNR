@@ -4,7 +4,10 @@ imds = imageDatastore(leafDatasetPath, ...
 
 tbl = countEachLabel(imds)
 
-[trainingSet,validationSet, testSet] = splitEachLabel(imds, 0.5, 0.25, 0.25, 'randomized');
+if ~exist('trainingSet','var') || ~exist('validationSet','var') || ~exist('testSet','var')
+    [trainingSet,validationSet, testSet] = splitEachLabel(imds, 0.5, 0.25, 0.25, 'randomized');
+    save('mySets.mat','trainingSet','validationSet','testSet')
+end
 
 layers = [
     imageInputLayer([227 227 3])
