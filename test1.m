@@ -4,7 +4,7 @@ imds = imageDatastore(leafDatasetPath, ...
 
 tbl = countEachLabel(imds)
 
-[trainingSet, testSet] = splitEachLabel(imds, 0.3, 'randomize');
+[trainingSet,validationSet, testSet] = splitEachLabel(imds, 0.5, 0.25, 0.25, 'randomized');
 
 layers = [
     imageInputLayer([227 227 3])
@@ -44,6 +44,7 @@ layers = [
 
 imageSize = [227 227 3];
 augmentedTrainingSet = augmentedImageDatastore(imageSize, trainingSet, 'ColorPreprocessing', 'gray2rgb');
+augmentedValidationSet = augmentedImageDatastore(imageSize, validationSet, 'ColorPreprocessing', 'gray2rgb');
 augmentedTestSet = augmentedImageDatastore(imageSize, testSet, 'ColorPreprocessing', 'gray2rgb');
 
 options = trainingOptions('sgdm', ...
