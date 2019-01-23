@@ -1,3 +1,4 @@
+reset(gpuDevice(1));
 leafDatasetPath = fullfile('Folio Leaf Dataset','Folio');
 imds = imageDatastore(leafDatasetPath, ...
     'IncludeSubfolders',true,'LabelSource','foldernames');
@@ -47,7 +48,7 @@ layers = [
 
 %augmentedTrainingSetN = denoisingImageDatastore(trainingSet,'ChannelFormat','RGB','PatchSize',[227 227]);
 imageSize = [227 227 3];
-trainingSet.ReadFcn = @(filename) imnoise(imread(filename),'gaussian');
+trainingSet.ReadFcn = @(filename) imnoise(imread(filename),'gaussian',0,5);
 augmentedTrainingSet = augmentedImageDatastore(imageSize, trainingSet, 'ColorPreprocessing', 'gray2rgb');
 %data = readall(augmentedTrainingSet);
 
@@ -67,8 +68,8 @@ options = trainingOptions('sgdm', ...
 
 %load 'myAlexNet2.mat';
 %if ~exist('net', 'var')
-    %net = trainNetwork(augmentedTrainingSet,layers,options);
-    net = trainNetwork(augmentedTrainingSet,net.Layers,options);
+    net = trainNetwork(augmentedTrainingSet,layers,options);
+    %net = trainNetwork(augmentedTrainingSet,net.Layers,options);
 %end
 
 [YPred,scores] = classify(net,augmentedTestSet);
